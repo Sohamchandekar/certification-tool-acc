@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Certification</title>
+    <link rel="icon" href="static/En_logo/en_half_white.svg" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div id="company-logo">
+                <img src="static/En_logo/en_half_blue.svg">
+            </div>
+            <h1 class="logo">Form Certification Tool </h1>
+        </header>
+
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="content-area">
+            <div class="instruction-panel">
+                <div class="dialogue-box">
+                    <h3>How to use this tool:</h3>
+                    <ul>
+                        <li>Upload the formatted PDF you wish to see your letterhead on!</li>
+                        <li>Enter your UDIN number and select your desired margin.</li>
+                        <li>Choose the format and click "Initiate Job" to generate your document.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-panel">
+                <div class="form-container">
+                    <h2 class="form-title">Create Your Letterhead Document</h2>
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="pdf_file">Upload PDF File</label>
+                            <div class="file-upload">
+                                <div class="file-upload-button" id="upload-label">
+                                    <span class="icon">📄</span> Choose PDF File
+                                </div>
+                                <input type="file" name="pdf_file" id="pdf_file" accept=".pdf" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="udin_text">Enter the Alphanumeric UDIN Number</label>
+                            <input type="text" name="udin_text" id="udin_text" placeholder="Enter UDIN..." required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="top_margin">Select Top Margin (in pixels)</label>
+                            <div class="range-container">
+                                <input type="range" name="top_margin" id="top_margin" min="0" max="100" value="0" oninput="updateSliderValue(this.value)">
+                                <div class="range-value" id="margin-value">0</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="format_type">Select Form3 Format</label>
+                            <select name="format_type" id="format_type">
+                                <option value="old">Old Format</option>
+                                <option value="new">New Format</option>
+                            </select>
+                        </div>
+
+                        <button type="submit">Initiate Job <span class="icon">💼</span></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-content">
+                <div class="copyright">Created with <span class="icon">❤️</span> by Soham</div>
+                <div class="happy-editing">Happy Editing! <span class="icon">😊</span></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateSliderValue(val) {
+            document.getElementById('margin-value').textContent = val;
+
+            // Update slider background based on value
+            const slider = document.getElementById('top_margin');
+            const percentage = (val / slider.max) * 100;
+            slider.style.background = `linear-gradient(to right, #4361ee 0%, #4361ee ${percentage}%, #e0e0e0 ${percentage}%, #e0e0e0 100%)`;
+        }
+
+        // Display file name when selected
+        document.getElementById('pdf_file').addEventListener('change', function() {
+            const fileName = this.files[0]?.name || 'No file chosen';
+            document.getElementById('upload-label').innerHTML = '<span class="icon">📄</span> ' + fileName;
+        });
+
+        // Initialize slider background
+        window.onload = function() {
+            updateSliderValue(document.getElementById('top_margin').value);
+        };
+    </script>
+</body>
+</html>
